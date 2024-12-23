@@ -54,8 +54,20 @@ class BinarySearchTree {
   }
 
   has(data) {
-    if (this.find(data)) return true;
-    else return false;
+
+    let current = this.rootNode;
+    let result = false;
+
+    while (current && !result) {
+      if (data < current.data) {
+        current = current.left;
+      } else if (data > current.data) {
+        current = current.right;
+      } else if (data === current.data){
+        result = true;
+      }
+    }
+    return result;
   }
 
   find(data) {
@@ -78,75 +90,76 @@ class BinarySearchTree {
   }
 
   remove(data) {
-    // if (!this.rootNode || !this.find(data)) return false;
-    // let current = this.rootNode;
-    // let nodeToDelete = null;
-    // let parent = null;
+    if (!this.rootNode || !this.find(data)) return false;
 
-    // while (current && !nodeToDelete) {
-    //   if (data < current.data) {
-    //     parent = current;
-    //     current = current.left
-    //   } else if (data > current.data) {
-    //     parent = current;
-    //     current = current.right;
-    //   } else {
-    //     nodeToDelete = current;
-    //   }
-    // }
+    let current = this.rootNode;
+    let nodeToDelete = null;
+    let parent = null;
 
-    // if (nodeToDelete.left === null && nodeToDelete.right === null) {
-    //   if (nodeToDelete.data > parent.data) {
-    //     parent.right = null;
-    //   } else {
-    //     parent.left = null;
-    //   }
-    //   nodeToDelete = null;
-    //   this.count--;
-    // } else if (nodeToDelete.left !== null && nodeToDelete.right === null) {
-    //   let replace = nodeToDelete.left;
-    //   nodeToDelete.left = null;
-    //   nodeToDelete = replace;
-    //   if (nodeToDelete.data > parent.data) {
-    //     parent.right = nodeToDelete;
-    //   } else {
-    //     parent.left = nodeToDelete;
-    //   }
-    //   this.count--;
-    // } else if (nodeToDelete.right !== null && nodeToDelete.left === null) {
-    //   let replace = nodeToDelete.right;
-    //   nodeToDelete.right = null;
-    //   nodeToDelete = replace;
-    //   if (nodeToDelete.data > parent.data) {
-    //     parent.right = nodeToDelete;
-    //   } else {
-    //     parent.left = nodeToDelete;
-    //   }
-    //   this.count--;
-    // }
-    // else {
-    //   let replace = nodeToDelete.right;
-    //   let parent = nodeToDelete;
-    //   while (replace.left) {
-    //     parent = replace;
-    //     replace = replace.left;
-    //   }
-    //   let rightTree = nodeToDelete.right;
-    //   let leftTree = nodeToDelete.left;
-    //   nodeToDelete = replace;
-    //   parent.left = null;
-    //   nodeToDelete.left = leftTree;
-    //   nodeToDelete.right = rightTree;
-    // }
+    while (current && !nodeToDelete) {
+      if (data < current.data) {
+        parent = current;
+        current = current.left
+      } else if (data > current.data) {
+        parent = current;
+        current = current.right;
+      } else {
+        nodeToDelete = current;
+      }
+    }
 
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    if (nodeToDelete.left === null && nodeToDelete.right === null) {
+      if (nodeToDelete.data > parent.data) {
+        parent.right = null;
+      } else {
+        parent.left = null;
+      }
+      nodeToDelete = null;
+      this.count--;
+    } else if (nodeToDelete.left !== null && nodeToDelete.right === null) {
+      let replace = nodeToDelete.left;
+      nodeToDelete.left = null;
+      nodeToDelete = replace;
+      if (nodeToDelete.data > parent.data) {
+        parent.right = nodeToDelete;
+      } else {
+        parent.left = nodeToDelete;
+      }
+      this.count--;
+    } else if (nodeToDelete.right !== null && nodeToDelete.left === null) {
+      let replace = nodeToDelete.right;
+      nodeToDelete.right = null;
+      nodeToDelete = replace;
+      if (nodeToDelete.data > parent.data) {
+        parent.right = nodeToDelete;
+      } else {
+        parent.left = nodeToDelete;
+      }
+      this.count--;
+    } else {
+      let replace = nodeToDelete.right;
+      let parent = nodeToDelete;
+      if (replace.left) {
+        while (replace.left) {
+        parent = replace;
+        replace = replace.left;
+        }
+        nodeToDelete.data = replace.data;
+        if (replace.right) {
+          parent.left = replace.right;
+        } else parent.left = null;
+      } else {
+        nodeToDelete.data = replace.data;
+        nodeToDelete.right = replace.right;
+        this.count -= 1;
+      }
+    }
   }
 
   min() {
     let current = this.rootNode;
     while (current.left) {
-      current =  current.left;
+      current = current.left;
     }
     return current.data;
   }
