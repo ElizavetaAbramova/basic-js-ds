@@ -12,27 +12,38 @@ const { NotImplementedError } = require('../extensions/index.js');
  * stack.pop(); // undefined
  *
  */
+
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.prev = null;
+  }
+}
 class Stack {
 
   constructor() {
-    this.stackArray = [];
-    this.length = 0;
+    this.head = null;
   }
 
   push(element) {
-    this.stackArray[this.length] = element;
-    this.length += 1;
+    let newNode = new Node(element);
+
+    if (!this.head) {
+      this.head = newNode;
+    } else {
+      newNode.prev = this.head;
+      this.head = newNode;
+    }
   }
 
   pop() {
-    let deleted = this.stackArray[this.length - 1];
-    this.stackArray = this.stackArray.slice(0, this.length - 1);
-    this.length -= 1;
-    return deleted;
+    let deleted = this.head;
+    this.head = deleted.prev;
+    return deleted.value;
   }
 
   peek() {
-    return this.stackArray[this.length - 1];
+    return this.head.value;
   }
 }
 
